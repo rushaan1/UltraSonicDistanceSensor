@@ -6,12 +6,14 @@ void setup(){
     pinMode(10, OUTPUT);
     pinMode(11,INPUT);
     pinMode(buz,OUTPUT);
+    pinMode(12,OUTPUT);
     byte numDigits = 1;
     byte digitPins[] = {};
     byte segmentPins[] = {6, 5, 2, 3, 4, 7, 8, 9};
+    bool resistorsOnSegments = true;
 
-    byte cc = COMMON_CATHODE; 
-    sevseg.begin(cc, numDigits, digitPins, segmentPins, true);
+    byte hardwareConfig = COMMON_CATHODE; 
+    sevseg.begin(hardwareConfig, numDigits, digitPins, segmentPins, resistorsOnSegments);
     sevseg.setBrightness(90);
 }
 
@@ -25,14 +27,16 @@ void loop(){
   delay(10);
   Serial.println(distance);
   if (distance<=9){
+    digitalWrite(12,HIGH);
     digitalWrite(buz,HIGH);
     sevseg.setNumber(distance, 0);
     sevseg.refreshDisplay(); 
     delay(100);
   }
   else if (distance>9){
+    digitalWrite(12,LOW);
     digitalWrite(buz,LOW);
-    sevseg.setNumber(69, 1);
+    sevseg.setNumber(0, 1);
     sevseg.refreshDisplay(); 
   }
 }
